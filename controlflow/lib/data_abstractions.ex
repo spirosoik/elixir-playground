@@ -53,7 +53,8 @@ end
 defmodule TodoList.CsvImporter do
 
   def import(file_name) do
-    read_lines
+    file_name
+    |> read_lines
     |> create_entries()
     |> TodoList.new()
   end
@@ -64,10 +65,10 @@ defmodule TodoList.CsvImporter do
     |> Stream.map(&String.replace(&1, "\n", ""))
   end
 
-  defp create_entries do
+  defp create_entries(lines) do
     lines
     |> Stream.map(&extract_fields/1)
-    |> convert_date
+    |> Stream.map(&create_entry/1)
   end
 
   defp extract_fields(line) do
